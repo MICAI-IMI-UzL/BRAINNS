@@ -3,13 +3,14 @@ import logging
 from dataclasses import dataclass
 import SimpleITK as sitk
 
-BASEDIR = '/data_marvin2/ehrhardt/projects/Fallstudie/NeuralPreProcessing'
-BASEDIR = '/data_marvin2/ehrhardt/projects/Fallstudie/tmp'
+BASEDIR = '/share/data_rechenknecht03_2/students/vierkant/test_preprocessing'
+# BASEDIR = '/data_marvin2/ehrhardt/projects/Fallstudie/NeuralPreProcessing'
 # BASEDIR = '/share/data_animal1/ehrhardt/StudentProjects/FallstudieSS24/NeuralPreprocessing'
 DATADIR = os.path.join(BASEDIR, 'data')
 RESULTDIR = os.path.join(BASEDIR, 'results')
+FSLDIR = '/share/data_rechenknecht03_2/students/vierkant/FSL'
 # FSLDIR = os.path.join(BASEDIR, 'FSL')
-FSLDIR = '/data_marvin2/ehrhardt/projects/Fallstudie/NeuralPreProcessing/FSL'
+# FSLDIR = '/data_marvin2/ehrhardt/projects/Fallstudie/NeuralPreProcessing/FSL'
 
 SequenceNames = ('t1c', 't1', 't2', 'flair')
 ReferenceSequence = 't1c'
