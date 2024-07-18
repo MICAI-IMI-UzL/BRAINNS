@@ -11,3 +11,7 @@ logs/
 .idea/
 nnUNet_trained_models/
 eval/
+.env
+redis/
+user1/
+*.nii.gz
