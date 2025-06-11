@@ -73,7 +73,7 @@ def preprocessing_task(user_id, project_id, segmentation_id, sequence_ids_and_na
     container = client.containers.create(
         image = "preprocessing:brainns",
         name = f'preprocessing_container_{segmentation_id}',
-        command = f"python main.py -p nifti -f {file_format}", # This command will be executed inside the spawned preprocessing-container
+        command = f"python main.py -f {file_format}", # This command will be executed inside the spawned preprocessing-container
         # command=["tail", "-f", "/dev/null"], # debug command keeps container alive
         volumes = {
             output_bind_mount_path: { 
