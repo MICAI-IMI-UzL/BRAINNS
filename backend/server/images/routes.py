@@ -27,7 +27,6 @@ def authenticate_user():
     if request.method == 'OPTIONS':
         return
     
-    # todo: add store_sequence_informations
     # do not use middleware for requests, that dont need the user_id
     public_endpoints = ['images.get_nifti', 'images.convert_nifti2dicom']
     
@@ -144,8 +143,16 @@ def convert_nifti2dicom():
 def get_segmentation(segmentation_id):
     user_id = g.user_id
 
-    # TODO: Check if Segmentaion belongs to user and exists
     segmentation = Segmentation.query.filter_by(segmentation_id=segmentation_id).first()
+
+    if not segmentation:
+        return jsonify({'message': f'Segmentation {segmentation.segmentation_name} with id {segmentation.segmentation_id} does not exist'}), 404
+
+    project = Project.query.filter_by(project_id=segmentation.project_id).first()
+
+    if(project.user_id != user_id):
+        return jsonify({'message': f'Access to segmentation {segmentation.segmentation_name} with id {segmentation.segmentation_id} denied, because it belongs to another user'}), 403
+
    
     # query the user mail from the db
     user = User.query.filter_by(user_id=user_id).first()
@@ -191,8 +198,16 @@ def get_segmentation(segmentation_id):
 def get_raw_segmentation(segmentation_id):
     user_id = g.user_id
 
-    # TODO: Check if Segmentaion belongs to user and exists
     segmentation = Segmentation.query.filter_by(segmentation_id=segmentation_id).first()
+    
+    if not segmentation:
+        return jsonify({'message': f'Segmentation {segmentation.segmentation_name} with id {segmentation.segmentation_id} does not exist'}), 404
+
+    project = Project.query.filter_by(project_id=segmentation.project_id).first()
+
+    if(project.user_id != user_id):
+        return jsonify({'message': f'Access to segmentation {segmentation.segmentation_name} with id {segmentation.segmentation_id} denied, because it belongs to another user'}), 403
+
     segmentation_name = segmentation.segmentation_name
 
     # query the user mail from the db

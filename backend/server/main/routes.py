@@ -38,7 +38,6 @@ def authenticate_user():
     if request.method == 'OPTIONS':
         return
     
-    # todo: add store_sequence_informations
     # do not use middleware for requests, that dont need the user_id
     public_endpoints = ['main.assign_types' , "main.get_nifti"]
     
@@ -428,6 +427,27 @@ def run_task():
     project_id = segmentation_data["projectID"]
     model = segmentation_data["model"]
 
+    # Error handling
+    project = Project.query.filter_by(project_id=project_id).first()
+
+    if(not project):
+        return jsonify({'message': f'specified project does not exist'}), 404
+
+
+    if(project.user_id != user_id):
+        return jsonify({'message': f'Access to project {project.project_name} with id {project.project_id} denied, because it belongs to another user'}), 403
+    
+    t1_sequence = Sequence.query.filter_by(sequence_id=segmentation_data["t1"]).first()
+    flair_sequence = Sequence.query.filter_by(sequence_id=segmentation_data["flair"]).first()
+    t2_sequence = Sequence.query.filter_by(sequence_id=segmentation_data["t2"]).first()
+    t1km_sequence = Sequence.query.filter_by(sequence_id=segmentation_data["t1km"]).first()
+
+    if(not t1_sequence or not flair_sequence or not t2_sequence or not t1km_sequence):
+        return jsonify({'message': f'specified sequences do not exist'}), 404
+
+    if(t1_sequence.project_id != project_id or flair_sequence.project_id != project_id or t2_sequence.project_id != project_id or t1km_sequence.project_id != project_id):
+        return jsonify({'message': f'sequences do not belong to the specified project'}), 400
+
     # Get display value entry from existing segmentation with the same sequences or create a new entry
     preprocessed_segmentation = db.session.query(Segmentation).filter(Segmentation.status!="ERROR", Segmentation.flair_sequence==segmentation_data["flair"], Segmentation.t1_sequence==segmentation_data["t1"], Segmentation.t1km_sequence==segmentation_data["t1km"], Segmentation.t2_sequence==segmentation_data["t2"]).first()
     display_values = 0
@@ -480,7 +500,6 @@ def run_task():
 
         print(f"Predicting segmentation {segmentation_id}")
 
-        # TODO: error handling
         # Get sequence name from database
         flair_name = Sequence.query.filter_by(sequence_id=segmentation_data["flair"]).first().sequence_name
         t1_name = Sequence.query.filter_by(sequence_id=segmentation_data["t1"]).first().sequence_name
@@ -640,7 +659,6 @@ def create_project():
 
     # TODO: All kinds of Validations
 
-
     if not (file_format == "dicom" or file_format == "nifti"):
         return jsonify({'message': f'Unsupported file format. Supported file formats are dicom or nifti.'}), 400
 
@@ -653,6 +671,15 @@ def create_project():
 
     sequence_ids = []
 
+    # query the user mail from the db
+    user = User.query.filter_by(user_id=user_id).first()
+    user_mail = user.user_mail if user else "unknown_user"
+    user_name = helper.get_user_name(user_mail)
+    domain = helper.get_domain(user_mail)
+
+    project_path = f'/usr/src/image-repository/{user_id}-{user_name}-{domain}/{project_id}-{project_information["project_name"]}'
+
+
     # Save new project in the database
     try:
         db.session.add(new_project)
@@ -661,14 +688,7 @@ def create_project():
         # Retrieve project_id from the new_project object after flush
         project_id = new_project.project_id
 
-        # query the user mail from the db
-        user = User.query.filter_by(user_id=user_id).first()
-        user_mail = user.user_mail if user else "unknown_user"
-        user_name = helper.get_user_name(user_mail)
-        domain = helper.get_domain(user_mail)
-
         # Create folder structure for project
-        project_path = f'/usr/src/image-repository/{user_id}-{user_name}-{domain}/{project_id}-{project_information["project_name"]}'
         raw_directory = os.path.join(f'{project_path}/raw')
         preprocessed_directory = os.path.join(f'{project_path}/preprocessed')
         segmentations_directory = os.path.join(f'{project_path}/segmentations')
@@ -776,7 +796,8 @@ def create_project():
     except Exception as e:
         print("Error: ", e)
         db.session.rollback()
-        # TODO REMOVE Folders in Image Repository so that database and image repository stay synchronized
+        if os.path.isdir(project_path):
+            shutil.rmtree(project_path)
         return jsonify({'message': f'Error occurred while creating the project: {str(e)}'}), 500
     
 
@@ -811,6 +832,10 @@ def get_meta_data(segmentation_id):
     try:
         user_id = g.user_id
         segmentation = db.session.query(Segmentation).filter_by(segmentation_id=segmentation_id).first()
+
+        if not segmentation:
+            return jsonify({'message': f'Segmentation {segmentation.segmentation_name} with id {segmentation.segmentation_id} does not exist'}), 404
+        
         project = db.session.query(Project).filter_by(project_id=segmentation.project_id).first()
 
         if(project.user_id != user_id):
