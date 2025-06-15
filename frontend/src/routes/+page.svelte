@@ -259,7 +259,7 @@
         // Get meta Information about the project
         let projectInformation = {
             project_name: project.projectName,
-            file_format: project.fileType, //TODO: get the correct file format
+            file_format: project.fileType, 
             file_infos: []
         }
 

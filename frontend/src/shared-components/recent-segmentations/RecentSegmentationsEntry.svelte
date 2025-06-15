@@ -70,7 +70,6 @@
     </div>
 
     <div class="segmentation-button-container">
-        <!-- TODO Implement this -->
         <button class="segmentation-button preview-button button" 
             disabled={viewButtonDisabled}
             on:click={() => dispatch('open-viewer', { segmentationID: segmentation.segmentationID})} 
