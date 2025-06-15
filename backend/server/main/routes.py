@@ -807,9 +807,11 @@ def create_project():
 
 
 @main_blueprint.route("/sequences", methods=["PATCH"])
-def store_sequence_informations():
+def store_sequence_information():
     try:
         user_id = g.user_id
+
+        print(request)
 
         # Get data from request
         sequences = request.get_json()
@@ -829,6 +831,7 @@ def store_sequence_informations():
     
     except Exception as e:
         db.session.rollback()
+        print(e)
         return jsonify({'message': f'Error occurred while updating sequence informations: {str(e)}'}), 500
     
 @main_blueprint.route("/segmentation/<segmentation_id>/sequences-metadata", methods=["GET"])

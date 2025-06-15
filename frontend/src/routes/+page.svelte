@@ -10,7 +10,7 @@
   import SubpageStatus from "../shared-components/general/SubpageStatus.svelte"
   import { Projects, isLoggedIn, isPolling, startPolling, stopPolling } from "../stores/Store";
   import { onMount } from 'svelte';
-  import { uploadProjectDataAPI, startSegmentationAPI, getUserIDAPI, getSingleDicomSequence, getDicomFromNifti } from '../lib/api.js';
+  import { uploadProjectDataAPI, startSegmentationAPI, getUserIDAPI, getSingleDicomSequence, getDicomFromNifti, uploadSequenceTypesAPI } from '../lib/api.js';
   import ProjectOverview from "../shared-components/project-overview/ProjectOverview.svelte";
   import SegmentationSelector from "../shared-components/segmentation-selector/SegmentationSelector.svelte";
   import JSZip from 'jszip'
@@ -244,7 +244,23 @@
     function closeSegmentationSelector(e) {
         newSegmentation = e.detail
         relevantProject = selectedProject
+        updateSequenceData()
         changeStatus(PageStatus.SEGMENTATION_CONFIRM)
+    }
+
+
+    function updateSequenceData() {
+        let sequences = []
+        for (let sequence of relevantProject.sequences) {
+            const sequenceData = {
+                sequence_id: sequence.sequenceID,
+                sequence_type: sequence.sequenceType,
+                selected: sequence.selected
+            }
+            sequences.push(sequenceData)
+        }
+        console.log(sequences)
+        uploadSequenceTypesAPI(JSON.stringify(sequences))
     }
 
 

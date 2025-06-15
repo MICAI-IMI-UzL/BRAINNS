@@ -147,8 +147,6 @@
     function handleModalClosed() {
 		// Only if the success modal was closed, we have to close the segmentation selector, too. This is done by the parent component.
 		if (missingSequences.length === 0) {
-            // TODO Handle this
-			// uploadSequenceTypesAPI()
 			const selectedFolders = project.sequences.filter(obj => obj.selected)
 			
             // This object is a temporary store of the segmentation, but it's not added to the project yet. This is not done until
