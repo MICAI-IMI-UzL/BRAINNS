@@ -671,14 +671,7 @@ def create_project():
 
     sequence_ids = []
 
-    # query the user mail from the db
-    user = User.query.filter_by(user_id=user_id).first()
-    user_mail = user.user_mail if user else "unknown_user"
-    user_name = helper.get_user_name(user_mail)
-    domain = helper.get_domain(user_mail)
-
-    project_path = f'/usr/src/image-repository/{user_id}-{user_name}-{domain}/{project_id}-{project_information["project_name"]}'
-
+    project_path = None
 
     # Save new project in the database
     try:
@@ -687,6 +680,14 @@ def create_project():
 
         # Retrieve project_id from the new_project object after flush
         project_id = new_project.project_id
+
+        # query the user mail from the db
+        user = User.query.filter_by(user_id=user_id).first()
+        user_mail = user.user_mail if user else "unknown_user"
+        user_name = helper.get_user_name(user_mail)
+        domain = helper.get_domain(user_mail)
+
+        project_path = f'/usr/src/image-repository/{user_id}-{user_name}-{domain}/{project_id}-{project_information["project_name"]}'
 
         # Create folder structure for project
         raw_directory = os.path.join(f'{project_path}/raw')
@@ -795,8 +796,11 @@ def create_project():
 
     except Exception as e:
         print("Error: ", e)
+
+        project_path = f'/usr/src/image-repository/{user_id}-{user_name}-{domain}/{project_id}-{project_information["project_name"]}'
+
         db.session.rollback()
-        if os.path.isdir(project_path):
+        if project_path and os.path.isdir(project_path):
             shutil.rmtree(project_path)
         return jsonify({'message': f'Error occurred while creating the project: {str(e)}'}), 500
     
