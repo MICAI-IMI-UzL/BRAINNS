@@ -161,6 +161,10 @@
      * Go back to the second-to-last status, thus removing the last status.
      */
     function goBackInStatus() {
+        // Update sequence information when leaving the SegmentationSelector
+        if (curPageStatus === PageStatus.NEW_SEGMENTATION) {
+            updateSequenceData()
+        }
         // If the status list only has at most one element, we will ignore the request
         // to go back a state.
         if (statusList.length > 1) {
@@ -249,9 +253,12 @@
     }
 
 
+    /**
+     * Sends the sequence data of the current project to backend to update the database
+     */
     function updateSequenceData() {
         let sequences = []
-        for (let sequence of relevantProject.sequences) {
+        for (let sequence of selectedProject.sequences) {
             const sequenceData = {
                 sequence_id: sequence.sequenceID,
                 sequence_type: sequence.sequenceType,
@@ -259,7 +266,6 @@
             }
             sequences.push(sequenceData)
         }
-        console.log(sequences)
         uploadSequenceTypesAPI(JSON.stringify(sequences))
     }
 

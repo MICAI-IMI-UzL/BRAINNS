@@ -811,8 +811,6 @@ def store_sequence_information():
     try:
         user_id = g.user_id
 
-        print(request)
-
         # Get data from request
         sequences = request.get_json()
 
