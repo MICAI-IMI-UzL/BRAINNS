@@ -99,7 +99,7 @@
                     {#if $Projects.flatMap(project => project.segmentations).length === 0}
                         <p>Keine Segmentierungen gefunden.</p>
                     {:else}
-                        {#each displayedSegmentations as segmentation}
+                        {#each displayedSegmentations.sort((segA, segB) => segB.segmentationID - segA.segmentationID) as segmentation}
                             {#key reloadSegmentationEntries}
                                 <RecentSegmentationsViewerEntry bind:segmentationData={segmentation} on:delete={deleteSegmentation} on:view-image={(event) => loadImage(event.detail.segmentationID, event.detail.fileType)}/>
                             {/key}
