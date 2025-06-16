@@ -106,7 +106,6 @@ def preprocessing_task(user_id, project_id, segmentation_id, sequence_ids_and_na
 
             success = container.put_archive('/app/input/dicom', tarstream)
         
-        # TODO: update folderstructure
         case "nifti":
             for seq in ["flair", "t1", "t1km", "t2"]:
                 seq_id = sequence_ids_and_names[seq][0]
