@@ -657,8 +657,6 @@ def create_project():
     print("----- Project information: -----")
     print(project_information)
 
-    # TODO: All kinds of Validations
-
     if not (file_format == "dicom" or file_format == "nifti"):
         return jsonify({'message': f'Unsupported file format. Supported file formats are dicom or nifti.'}), 400
 
@@ -742,10 +740,10 @@ def create_project():
                     # Extract dicom files to the correct folder
                     with zipfile.ZipFile(files) as z:
                         # Get the files from the sequence
-                        relevant_files = [f for f in z.namelist() if f.startswith(sequence_name) and os.path.basename(f)]
+                        relevant_files = [f for f in z.namelist() if f.startswith(sequence_name) and os.path.basename(f).endswith('.dcm')]
                         if not relevant_files:
-                            continue
-                        
+                            raise Exception(f"Image data for sequence: {sequence_name} is missing.")
+
                         # Extract one slice of each sequence to the classifier folder
                         z.extract(relevant_files[0], classifier_path)
 
@@ -771,8 +769,10 @@ def create_project():
                                 # Extract each file to the image-repository
                                 with source, target:
                                     shutil.copyfileobj(source, target)
+                            else:
+                                raise Exception(f"Image data for sequence: {sequence_name} has unexpected format.")
                         else:
-                            return jsonify({'message': f'Image data for sequence: {sequence_name} is missing.'}), 400
+                            raise Exception(f"Image data for sequence: {sequence_name} is missing.")
 
         if file_format == "dicom":
             # Run classification
