@@ -189,8 +189,8 @@ def get_segmentation(segmentation_id):
         )
 
     # Add a header indicating if files are DICOM or NIFTI
-    # TODO: Save in DB if Files are DICOM or NIFTI
-    response.headers['X-File-Type'] = "DICOM"  # "NIFTI"
+    # Currently only DICOM files are supported by cornerstone
+    response.headers['X-File-Type'] = "DICOM"  
 
     return response
 
@@ -258,6 +258,7 @@ def get_raw_segmentation(segmentation_id):
     return jsonify({"segmentation": segmentation_list})
 
 
+# This is just an example for how a nifti endpoint could look like, but its not being used since nifti is not supported by the viewer yet
 @images_blueprint.route("/preprocessed/nifti/test-nifti.nii.gz", methods=["GET"])
 def get_nifti():
     # Path to your NIfTI file
@@ -269,9 +270,6 @@ def get_nifti():
     else:
         return jsonify({"error": "File not found"}), 404
 
-@images_blueprint.route("/preprocessed/dicom/test-nifti.nii.gz", methods=["GET"])
-def get_dicom():
-    return "TODO: Implement"
 
 @images_blueprint.route("/download-segmentation/<seg_id>/<file_format>", methods=["GET"])
 def download(seg_id, file_format):

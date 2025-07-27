@@ -63,8 +63,6 @@
     </div>
     
     <div class="info-container">
-        <!-- TODO Replace this with an SVG representation of the status -->
-        <!-- TODO Implement this correctly -->
         <span class="segmentation-status" title="Status der Segmentierung" style="color: var({getStatusClass(updatedSegmentation.status.id)})">{currentStatus}</span>
         <span class="segmentation-time" title="Start der Segmentierung">{segmentationTime}</span>
     </div>

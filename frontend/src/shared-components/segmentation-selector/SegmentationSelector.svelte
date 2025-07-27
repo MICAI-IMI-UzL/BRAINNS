@@ -65,10 +65,6 @@
 		dispatch("goBack")
 	}
 
-    /**
-     * TODO This is a list of functions that should be imported by FolderUploader and SegmentationSelector, instead of having duplicate code!!
-     * ############################
-    */
     function selectBestResolutions() {
 		// Unselect all sequences
 		for (let el of project.sequences) {

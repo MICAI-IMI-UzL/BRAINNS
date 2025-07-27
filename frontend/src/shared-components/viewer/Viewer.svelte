@@ -277,9 +277,6 @@
   // =============================== Tool Activation functions ======================
   // ================================================================================
 
-  // TODO: Refactor and move to tool.js
-  // -> Create one dynamic function: activatePrimaryTool(toolname)
-
   function activateCrosshairTool(){
 
     if($viewerState.activePrimaryTool == CrosshairsTool.toolName){

@@ -3,7 +3,6 @@
 
     export let sequenceMappings = []
 
-	// TODO Make this globally available
 	let variablesToStringMapping = {
 		t1: "T1",
 		t2: "T2/T2*",

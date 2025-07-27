@@ -410,7 +410,6 @@ def model_config(model, segmentation_id):
             return {
                 "image": "own-model:brainns",
                 "container_name": f'own_model_container_{segmentation_id}',
-                # TODO Don't hard-code these things (like the checkpoint)
                 "command": ["python", "src/inference.py", 
                             "--lightning-checkpoint=/app/checkpoints/checkpoint-01-04-25-version-server-58-epoch-23.ckpt", 
                             "--input-path=/app/input/", 

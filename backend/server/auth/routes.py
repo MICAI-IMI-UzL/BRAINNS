@@ -83,7 +83,6 @@ def login():
         # generate session token
         session_token = str(uuid.uuid4())
 
-        # TODO: only safe latest session (Should we?)
         new_session = Session(session_token=session_token, user_id=user.user_id)
         db.session.add(new_session)
         db.session.commit()

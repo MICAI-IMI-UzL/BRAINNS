@@ -43,7 +43,6 @@ export let hasLoadedProjectsFromBackend = writable(false)
 
 // For now, use a Store variable to store whether to show deletion popups.
 // This variable refers to the deletion of a single entry. The modal for deleting all entries can't be skipped.
-// TODO Do this using cookies
 export let ShowNoDeleteModals = writable(false)
 
 // A constant list of strings of possible sequences to display to the user.

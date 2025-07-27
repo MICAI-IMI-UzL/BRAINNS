@@ -207,7 +207,7 @@ async function prefetchMetadataInformation(imageIdsToPrefetch) {
 // ================================================================================
 
 
-
+// This is just an example of how nifti loding could look once the viewer supports it
 export async function loadNiftiImage(){
     const currentViewerState = get(viewerState);
     const axialViewportID = currentViewerState.viewportIds[0] 
@@ -262,7 +262,7 @@ export async function loadNiftiImage(){
 }
 
 
-// TODO: Figure out how to change the camera orientations of the viewports dynamically
+// This is just an example on how to change the camera orientation in cornerstone
 function setCamera(rowVec, colVec, axialViewportID, sagitalViewportID, coronalViewportID){
 
     // const viewport0 = getEnabledElementByViewportId(axialViewportID)
