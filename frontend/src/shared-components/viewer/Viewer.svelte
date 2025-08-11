@@ -779,21 +779,25 @@
     <button 
       class="modality-button {$viewerState.currentlyDisplayedModality === 't1' ? 'selected' : ''}" 
       on:click={() => changeModality("t1")}
+      disabled={$viewerState.currentlyDisplayedModality === 't1'}
     >T1</button>
   
     <button 
       class="modality-button {$viewerState.currentlyDisplayedModality === 't1km' ? 'selected' : ''}" 
       on:click={() => changeModality("t1km")}
+      disabled={$viewerState.currentlyDisplayedModality === 't1km'}
     >T1km</button>
   
     <button 
       class="modality-button {$viewerState.currentlyDisplayedModality === 't2' ? 'selected' : ''}" 
       on:click={() => changeModality("t2")}
+      disabled={$viewerState.currentlyDisplayedModality === 't2'}
     >T2</button>
   
     <button 
       class="modality-button {$viewerState.currentlyDisplayedModality === 'flair' ? 'selected' : ''}" 
       on:click={() => changeModality("flair")}
+      disabled={$viewerState.currentlyDisplayedModality === 'flair'}
     >Flair</button>
   </div>
 
@@ -976,6 +980,12 @@
   }
   .modality-button.selected {
     border-color: var(--button-color-preview); /* Maybe change color */
+  }
+  
+  .modality-button:disabled {
+    background-color: black !important;     /* Remove default gray background */
+    cursor: default;
+    color: white !important; 
   }
 
   .settings-button{
