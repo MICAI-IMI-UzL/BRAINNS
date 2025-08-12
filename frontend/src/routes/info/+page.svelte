@@ -25,6 +25,7 @@
 </script>
 
 <PageWrapper>
+  <div class="card">
     <div>
       {#if userGuideHtml}
           <div class="markdown">{@html userGuideHtml}</div>
@@ -32,12 +33,12 @@
           <p>Lade Benutzerhandbuch…</p>
       {/if}
     </div>
+  </div>
 </PageWrapper>
 
 <style global>
   /* Optionales Styling für Markdown */
   :global(.markdown) {
-    max-width: 1000px;
     margin: 2rem auto;
     /* ... rest siehe oben */
   }
@@ -46,18 +47,33 @@
     /* ... */
   }
 
-  .markdown a:hover,
-  .markdown a:focus {
+  :global(.markdown a:hover),
+  :global(.markdown a:focus) {
     color: var(--button-color-bright-green);
     text-decoration: none;
   }
 
   /* Optional: Überschriften zentrieren */
-  .markdown h1,
-  .markdown h2,
-  .markdown h3 {
-    text-align: center;
+  :global(.markdown h1),
+  :global(.markdown h2),
+  :global(.markdown h3) {
     margin-top: 2rem;
     margin-bottom: 1rem;
+  }
+
+  :global(.markdown img) {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: #1f2937;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    max-width: 1000px;
+    margin: 0 auto;
   }
 </style>

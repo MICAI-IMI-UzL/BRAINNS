@@ -130,7 +130,7 @@ Zusätzlich bietet der Viewer Werkzeuge für **Window Leveling** (Fensterung) un
 
 Die Elemente des Viewers sind im Bild unten beschriftet.
 
-<img src="uploads/6d5c1fb1ab53046cf953a32d7badecdd/grafik.png" alt="Viewer" width="1000" />
+<img src="uploads/6d5c1fb1ab53046cf953a32d7badecdd/grafik.png" alt="Viewer"/>
 
 <a id="ViewerLaden"></a>
 ## Wie man eine Segmentierung im Viewer lädt
